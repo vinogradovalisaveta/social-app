@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "social-app"
+version = "0.1.0"
+description = ""
+authors = ["Lisaveta Yurashevich <vinogradova.lisaveta@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.112.1"
+uvicorn = "^0.30.6"
+pydantic = {extras = ["email"], version = "^2.8.2"}
+aiosqlite = "^0.20.0"
+alembic = "^1.13.2"
+passlib = "^1.7.4"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.8.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
