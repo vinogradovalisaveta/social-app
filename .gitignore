@@ -3,3 +3,4 @@ app/__pycache__/
 __pycache__/
 .idea/
 social_db.db
+alembic/__pycache__/
