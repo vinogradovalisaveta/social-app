@@ -70,7 +70,4 @@ router = APIRouter(prefix="/users", tags=["users"])
 async def register(
     user: UserCreateSchema, session: AsyncSession = Depends(get_session)
 ):
-    try:
-        return await create_user(session, user)
-    except IntegrityError:
-        raise HTTPException(status_code=422, detail="this user already exists")
+    return await create_user(session, user)
