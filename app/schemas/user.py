@@ -1,14 +1,4 @@
-from cryptography.utils import deprecated
-from fastapi import APIRouter, Depends
-from passlib.context import CryptContext
 from pydantic import BaseModel, Field, EmailStr
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.util import await_only
-from starlette.exceptions import HTTPException
-
-from app.database import get_session
-from app.models import User
 
 
 class UserBaseSchema(BaseModel):
@@ -46,28 +36,3 @@ class UserCreateSchema(UserBaseSchema):
     """
 
     password: str = Field(..., max_length=256)
-
-
-async def encrypt_password(password: str) -> str:
-    __pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-    return __pwd_context.hash(password)
-
-
-async def create_user(session: AsyncSession, user: UserCreateSchema):
-    new_user = User(**user.model_dump())
-    new_user.password = await encrypt_password(new_user.password)
-    session.add(new_user)
-    await session.commit()
-    await session.refresh(new_user)
-    return new_user
-
-
-router = APIRouter(prefix="/users", tags=["users"])
-
-
-@router.post("/")
-async def register(
-    user: UserCreateSchema, session: AsyncSession = Depends(get_session)
-):
-    return await create_user(session, user)
