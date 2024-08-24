@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel, Field, EmailStr
 
 
@@ -11,6 +13,9 @@ class UserBaseSchema(BaseModel):
 
     username: str = Field(..., max_length=50)
     email: EmailStr = Field(..., max_length=256)
+    name: Optional[str] = None
+    location: Optional[str] = None
+    bio: Optional[str] = None
 
 
 class UserSchema(UserBaseSchema):
@@ -36,3 +41,21 @@ class UserCreateSchema(UserBaseSchema):
     """
 
     password: str = Field(..., max_length=256)
+
+
+class UserReadSchema(BaseModel):
+    username: str
+    email: str
+    name: str
+    location: str
+    bio: str
+
+    class Config:
+        from_attributes = True
+
+
+class UserUpdateSchema(BaseModel):
+    password: Optional[str] = None
+    name: str
+    location: str
+    bio: str
