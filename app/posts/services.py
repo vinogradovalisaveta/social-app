@@ -11,7 +11,7 @@ async def create_post(
     post: CreatePostSchema,
     user: User = Depends(get_current_user),
 ) -> Post:
-    new_post = Post(**post.model_dump())
+    new_post = Post(**post.dict())
     new_post.author_id = user.id
     session.add(new_post)
     await session.commit()
