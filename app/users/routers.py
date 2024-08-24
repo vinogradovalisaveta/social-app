@@ -14,7 +14,7 @@ from app.users.schemas import (
 from app.security.services import get_current_user, authenticate_user
 from app.security.token import create_jwt_token_pair
 from app.security.token_schema import TokenPairSchema
-from app.users.models import User
+from app.models import User
 from app.users.services import (
     create_user,
     get_all_users,

@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.users.schemas import UserCreateSchema, UserUpdateSchema
 from app.security.password import encrypt_password
-from app.users.models import User
+from app.models import User
 
 
 async def create_user(session: AsyncSession, user: UserCreateSchema):

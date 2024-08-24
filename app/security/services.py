@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_session
 from app.security.password import validate_password
 from app.security.token import oauth2_scheme, get_token_payload, USER_IDENTIFIER
-from app.users.models import User
+from app.models import User
 
 
 async def authenticate_user(
