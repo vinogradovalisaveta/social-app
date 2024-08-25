@@ -2,13 +2,15 @@ from datetime import datetime
 from pydantic import BaseModel
 
 
-class CreatePostSchema(BaseModel):
+class BasePostModel(BaseModel):
     title: str
     body: str
 
 
-class ReadPostSchema(BaseModel):
+class CreatePostSchema(BasePostModel):
+    pass
+
+
+class ReadPostSchema(BasePostModel):
     author: int
-    title: str
-    body: str
     created_at: datetime
