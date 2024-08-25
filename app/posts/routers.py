@@ -1,16 +1,23 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.database import get_session
 from app.posts.schemas import CreatePostSchema, ReadPostSchema
-from app.posts.services import create_post, read_post, update_post, delete_post
+from app.posts.services import (
+    create_post,
+    read_post,
+    update_post,
+    delete_post,
+    get_all_posts,
+    get_posts_by_author,
+    get_my_posts,
+)
 from app.security.services import get_current_user
 from app.models import User
 
 post_router = APIRouter(prefix="/posts", tags=["posts"])
 
 
-@post_router.post("/", response_model=ReadPostSchema)
+@post_router.post("/", response_model=CreatePostSchema)
 async def add_new_post(
     post: CreatePostSchema,
     session: AsyncSession = Depends(get_session),
@@ -18,7 +25,7 @@ async def add_new_post(
 ):
     new_post = await create_post(session=session, post=post, user=user)
     return ReadPostSchema(
-        author=new_post.author_id,
+        author=new_post.author_username,
         title=new_post.title,
         body=new_post.body,
         created_at=new_post.created_at,
@@ -73,3 +80,35 @@ async def post_delete(
         await delete_post(session, slug)
     except:
         raise HTTPException(status_code=500, detail="unknown error")
+
+
+@post_router.get("/")
+async def get_posts(session: AsyncSession = Depends(get_session)):
+    try:
+        return await get_all_posts(session)
+    except:
+        raise HTTPException(status_code=404, detail="no posts found")
+
+
+@post_router.get("/{username}/posts")
+async def get_authors_posts(
+    author: str,
+    session: AsyncSession = Depends(get_session),
+):
+    posts = await get_posts_by_author(session, author)
+    if not posts:
+        raise HTTPException(status_code=404, detail="no posts found")
+
+    return posts
+
+
+@post_router.get("/{username}/my_posts")
+async def my_posts(
+    user: User = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session),
+):
+    posts = await get_my_posts(session=session, user=user)
+    if not posts:
+        raise HTTPException(status_code=404, detail="post not found")
+
+    return posts

@@ -29,11 +29,11 @@ async def authenticate_user(
 
 async def get_current_user(
     token: str = Depends(oauth2_scheme),
-    session: AsyncSession = Depends(get_session, use_cache=True),
+    session: AsyncSession = Depends(get_session),
 ) -> User:
     payload = get_token_payload(token, "access")
     try:
-        query = select(User).where(User.id == payload[USER_IDENTIFIER])
+        query = select(User).where(User.username == payload[USER_IDENTIFIER])
         print(query)
         result = await session.execute(query)
         result.unique()

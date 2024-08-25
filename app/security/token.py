@@ -22,13 +22,13 @@ def get_token_payload(token: str, token_type: str) -> dict:
     return payload
 
 
-def create_jwt_token_pair(user_id: int) -> TokenPairSchema:
+def create_jwt_token_pair(user_username: str) -> TokenPairSchema:
     access_token = create_jwt_token(
-        {USER_IDENTIFIER: user_id, "type": "access"},
+        {USER_IDENTIFIER: user_username, "type": "access"},
         timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
     )
     refresh_token = create_jwt_token(
-        {USER_IDENTIFIER: user_id, "type": "refresh"},
+        {USER_IDENTIFIER: user_username, "type": "refresh"},
         timedelta(hours=REFRESH_TOKEN_EXPIRE_HOURS),
     )
 
@@ -52,7 +52,7 @@ def create_jwt_token(data: dict, delta: timedelta) -> str:
 
 SECRET_KEY = os.environ.get("JWT_SECRET_KEY", "default-i9i3902849209323m009sfhs90dh")
 ALGORITHM = "HS512"
-USER_IDENTIFIER = "user_id"
+USER_IDENTIFIER = "user_username"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 REFRESH_TOKEN_EXPIRE_HOURS = 24 * 7
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/users/token")

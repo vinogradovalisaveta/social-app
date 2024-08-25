@@ -12,5 +12,5 @@ class CreatePostSchema(BasePostModel):
 
 
 class ReadPostSchema(BasePostModel):
-    author: int
+    author: str
     created_at: datetime
