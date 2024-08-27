@@ -4,12 +4,6 @@ from pydantic import BaseModel, Field, EmailStr
 
 
 class UserBaseSchema(BaseModel):
-    """
-    Эта схема определяет базовые свойства пользователя, которые
-    являются общими для всех представлений пользователя.
-    Использование: Эта схема используется как основа для других
-    схем пользователя, таких как UserSchema и UserCreateSchema.
-    """
 
     username: str = Field(..., max_length=50)
     email: EmailStr = Field(..., max_length=256)
@@ -59,3 +53,11 @@ class UserUpdateSchema(BaseModel):
     name: str
     location: str
     bio: str
+
+
+class UserSubscribeSchema(BaseModel):
+    """
+    for subscription/subscriber list
+    """
+
+    username: str
