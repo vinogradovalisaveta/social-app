@@ -23,10 +23,10 @@ from app.users.services import (
     get_user_by_email,
 )
 
-router = APIRouter(prefix="/users", tags=["users"])
+user_router = APIRouter(prefix="/users", tags=["users"])
 
 
-@router.post("/")
+@user_router.post("/")
 async def register(
     user: UserCreateSchema, session: AsyncSession = Depends(get_session)
 ):
@@ -39,12 +39,12 @@ async def register(
     return await create_user(session=session, user=user)
 
 
-@router.get("/me", response_model=UserSchema)
+@user_router.get("/me", response_model=UserSchema)
 async def get_current_user_view(current_user: User = Depends(get_current_user)):
     return current_user
 
 
-@router.get("/user/user", response_model=UserSchema)
+@user_router.get("/user/user", response_model=UserSchema)
 async def get_user_profile(
     username: Optional[str] = None,
     session: AsyncSession = Depends(get_session),
@@ -59,13 +59,13 @@ async def get_user_profile(
     return db_user
 
 
-@router.get("/users", response_model=List[UserReadSchema])
+@user_router.get("/users", response_model=List[UserReadSchema])
 async def get_users(session: AsyncSession = Depends(get_session)):
     users = await get_all_users(session=session)
     return users
 
 
-@router.post("/token", response_model=TokenPairSchema)
+@user_router.post("/token", response_model=TokenPairSchema)
 async def authenticate(
     session: AsyncSession = Depends(get_session),
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -74,7 +74,7 @@ async def authenticate(
     return create_jwt_token_pair(user_username=user.username)
 
 
-@router.put("/{username}", response_model=UserUpdateSchema)
+@user_router.put("/{username}", response_model=UserUpdateSchema)
 async def update_user_data(
     username: str,
     user: UserUpdateSchema,
