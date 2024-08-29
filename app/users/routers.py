@@ -71,7 +71,7 @@ async def authenticate(
     form_data: OAuth2PasswordRequestForm = Depends(),
 ):
     user = await authenticate_user(session, form_data.username, form_data.password)
-    return create_jwt_token_pair(user_username=user.username)
+    return await create_jwt_token_pair(user_username=user.username)
 
 
 @user_router.put("/{username}", response_model=UserUpdateSchema)

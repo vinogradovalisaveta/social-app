@@ -22,12 +22,15 @@
             <div class="user-actions">
                 <input type="text" placeholder="Поиск" class="search-bar">
                 <button class="search-button"><i class="fas fa-search"></i></button>
+                {% if user %}
                 <a href="#" class="profile">
                     <img src="avatar.png" alt="Аватар" class="avatar">
-                    <span class="username">Имя пользователя</span>
+                    <span class="username">{{ user.username }}</span>
                 </a>
-                <button class="new-post-button">log in</button>
-                <a href="{{ url_for('register') }}"><button class="new-post-button">register</button></a>
+                {% else %}
+                <a href="{{ url_for('show_login_form') }}"><button class="new-post-button">log in</button></a>
+                <a href="{{ url_for('show_signup_form') }}"><button class="new-post-button">register</button></a>
+                {% endif %}
                 <button class="new-post-button">Создать новую запись</button>
             </div>
         </div>

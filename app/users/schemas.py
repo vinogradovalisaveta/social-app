@@ -61,3 +61,12 @@ class UserSubscribeSchema(BaseModel):
     """
 
     username: str
+
+
+class UserLoginSchema(BaseModel):
+    """
+    for login
+    """
+
+    username: str
+    password: str

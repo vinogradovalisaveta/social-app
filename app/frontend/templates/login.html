@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form action="{{ url_for('signup') }}" method="post">
+
+<form action="{{ url_for('login_user') }}" method="post">
     <label for="username">username</label>
     <input type="text" id="username" name="username" required>
-
-    <label for="email">email</label>
-    <input type="email" id="email" name="email" required>
 
     <label for="password">password</label>
     <input type="password" id="password" name="password" required>
 
-    <button type="submit">register</button>
+    <button type="submit">login</button>
 </form>
+{% if detail %}
+<p style="color: red;">{{ detail }}</p>
+{% endif %}
 {% endblock %}
