@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <main>
+        <div class="container">
+            <section class="featured-posts">
+                <h2>Новейшие статьи</h2>
+                <div class="post-grid">
+                    {% for post in posts %}
+                    <article class="post-card">
+                        <img src="post-image-1.jpg" alt="Пост 1">
+                        <a href="{{ url_for('read_more', slug=post.slug) }}">
+                        <h3>{{ post.title }}</h3>
+                            </a>
+                        <p>{{ post.body|truncate(300) }}</p>
+                        <div class="post-info">
+                            <span class="author"><a href="{{ url_for('get_profile', username=post.author_username) }}">{{ post.author_username }}</a></span>
+                            <span class="date">{{ post.created_at }}</span>
+                        </div>
+                        <a href="{{ url_for('read_more', slug=post.slug) }}" class="read-more-button">Читать далее</a>
+                        <div class="post-stats">
+                            <i class="far fa-heart"></i> 100
+                            <i class="far fa-comment"></i> 20
+                            <i class="far fa-eye"></i> 500
+                        </div>
+                    </article>
+                    {% endfor %}
+                    <!--  Добавьте больше карточек постов -->
+                </div>
+            </section>
+            <section class="subscribe">
+                <h2>Подпишитесь на рассылку</h2>
+                <form>
+                    <input type="email" placeholder="Введите email" required>
+                    <button type="submit">Подписаться</button>
+                </form>
+            </section>
+        </div>
+    </main>
+
+{% endblock %}

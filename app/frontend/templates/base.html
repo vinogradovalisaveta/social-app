@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slay Blog</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <img src="logo.png" alt="Slay Blog Logo" class="logo">
+            <nav>
+                <ul>
+                    <li><a href="#">Мода</a></li>
+                    <li><a href="#">Красота</a></li>
+                    <li><a href="#">Стиль жизни</a></li>
+                    <li><a href="#">Путешествия</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <input type="text" placeholder="Поиск" class="search-bar">
+                <button class="search-button"><i class="fas fa-search"></i></button>
+                <a href="#" class="profile">
+                    <img src="avatar.png" alt="Аватар" class="avatar">
+                    <span class="username">Имя пользователя</span>
+                </a>
+                <button class="new-post-button">log in</button>
+                <a href="{{ url_for('register') }}"><button class="new-post-button">register</button></a>
+                <button class="new-post-button">Создать новую запись</button>
+            </div>
+        </div>
+    </header>
+{% block content %}
+{% endblock %}
+<footer>
+        <div class="container">
+            <p>© 2023 Slay Blog. Все права защищены.</p>
+            <ul class="social-links">
+                <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                <li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                <li><a href="#" target="_blank"><i class="fab fa-facebook"></i></a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+</body>
+</html>
