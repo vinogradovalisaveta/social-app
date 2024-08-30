@@ -29,11 +29,12 @@ async def read_post(session: AsyncSession, slug: str):
 
 async def update_post(session: AsyncSession, slug: str, post_data: CreatePostSchema):
     old_post = await read_post(session, slug)
-    old_post.title = post_data.title
-    old_post.body = post_data.body
 
     if old_post.title != post_data.title:
         old_post.slug = slugify(post_data.title)
+
+    old_post.title = post_data.title
+    old_post.body = post_data.body
 
     session.add(old_post)
     await session.commit()

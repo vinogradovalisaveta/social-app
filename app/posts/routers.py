@@ -49,12 +49,12 @@ async def update_old_post(
     session: AsyncSession = Depends(get_session),
 ):
     old_post = await read_post(session, slug)
-    if old_post.author_id == user.id:
+    if old_post.author_username == user.username:
         updated_post = await update_post(
             session=session, slug=slug, post_data=post_data
         )
         return ReadPostSchema(
-            author=updated_post.author_id,
+            author=updated_post.author_username,
             title=updated_post.title,
             body=updated_post.body,
             created_at=old_post.created_at,
