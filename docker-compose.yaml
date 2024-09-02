@@ -8,6 +8,13 @@ services:
     env_file:
       - .env-non-dev
 
+  redis:
+    image: redis:7-alpine
+    container_name: redis_app
+    command: --port 5370
+    expose:
+      - 5370
+
   app:
     build:
       context: .

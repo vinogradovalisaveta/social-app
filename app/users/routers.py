@@ -4,6 +4,8 @@ from fastapi import Depends, HTTPException, APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from fastapi_cache.decorator import cache
+
 from app.database import get_session
 from app.users.schemas import (
     UserSchema,
@@ -60,6 +62,7 @@ async def get_user_profile(
 
 
 @user_router.get("/users", response_model=List[UserReadSchema])
+@cache(expire=60)
 async def get_users(session: AsyncSession = Depends(get_session)):
     users = await get_all_users(session=session)
     return users

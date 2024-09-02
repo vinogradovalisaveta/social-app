@@ -13,6 +13,7 @@ from app.posts.services import (
 )
 from app.security.services import get_current_user
 from app.models import User
+from fastapi_cache.decorator import cache
 
 post_router = APIRouter(prefix="/posts", tags=["posts"])
 
@@ -83,6 +84,7 @@ async def post_delete(
 
 
 @post_router.get("/")
+@cache(expire=60)
 async def get_posts(session: AsyncSession = Depends(get_session)):
     try:
         return await get_all_posts(session)
