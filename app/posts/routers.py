@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.ext.asyncio import AsyncSession
+from typing import Sequence
+
 from app.database import get_session
+from app.models import User, Post
 from app.posts.schemas import CreatePostSchema, ReadPostSchema
 from app.posts.services import (
     create_post,
@@ -12,8 +13,11 @@ from app.posts.services import (
     get_my_posts,
 )
 from app.security.services import get_current_user
-from app.models import User
+
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi_cache.decorator import cache
+from sqlalchemy.ext.asyncio import AsyncSession
+
 
 post_router = APIRouter(prefix="/posts", tags=["posts"])
 
@@ -23,23 +27,40 @@ async def add_new_post(
     post: CreatePostSchema,
     session: AsyncSession = Depends(get_session),
     user: User = Depends(get_current_user),
-):
+) -> ReadPostSchema:
+    """
+    создает новый пост
+    user: текущий пользователь
+    возвращает ReadPostSchema
+    """
     new_post = await create_post(session=session, post=post, user=user)
     return ReadPostSchema(
         author=new_post.author_username,
         title=new_post.title,
         body=new_post.body,
         created_at=new_post.created_at,
-        slug=new_post.slug,
     )
 
 
-@post_router.get("/{slug}")
+@post_router.get("/{slug}", response_model=ReadPostSchema)
 async def get_one_post(
     slug: str,
     session: AsyncSession = Depends(get_session),
-):
-    return await read_post(session, slug)
+) -> ReadPostSchema:
+    """
+    получение поста по слагу
+    возвращает ReadPostSchema
+    """
+    post = await read_post(session, slug)
+    if post:
+        return ReadPostSchema(
+            author=post.author_username,
+            title=post.title,
+            body=post.body,
+            created_at=post.created_at,
+        )
+    else:
+        raise HTTPException(status_code=404, detail="post not found")
 
 
 @post_router.put("/{slug}", response_model=ReadPostSchema)
@@ -48,44 +69,60 @@ async def update_old_post(
     slug: str,
     user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
-):
+) -> ReadPostSchema:
+    """
+    обновляет (изменяет значение полей) уже созданный пост
+    если пост существует и пользователь, отправляющий запрос, является автором
+    возвращает объект ReadPostSchema
+    """
     old_post = await read_post(session, slug)
-    if old_post.author_username == user.username:
-        updated_post = await update_post(
-            session=session, slug=slug, post_data=post_data
-        )
-        return ReadPostSchema(
-            author=updated_post.author_username,
-            title=updated_post.title,
-            body=updated_post.body,
-            created_at=old_post.created_at,
-            slug=updated_post.slug,
-        )
+    if old_post:
+        if old_post.author_username == user.username:
+            updated_post = await update_post(
+                session=session, slug=slug, post_data=post_data
+            )
+            return ReadPostSchema(
+                author=updated_post.author_username,
+                title=updated_post.title,
+                body=updated_post.body,
+                created_at=old_post.created_at,
+                slug=updated_post.slug,
+            )
+        else:
+            raise HTTPException(status_code=403, detail="forbidden")
     else:
-        raise HTTPException(status_code=403, detail="forbidden")
+        raise HTTPException(status_code=404, detail="post not found")
 
 
 @post_router.delete("/{slug}")
 async def post_delete(
     slug: str,
     session: AsyncSession = Depends(get_session),
-    current_user: User = Depends(get_current_user),
-):
-    post_data = await read_post(session, slug)
-    if post_data is None:
+    user: User = Depends(get_current_user),
+) -> str:
+    """
+    удаляет пост из базы данных
+    user: текущий пользователь
+    если пользователь не является автором - ошибка 403
+    возвращает сообщение об успешном удалении
+    """
+    post = await read_post(session, slug)
+    if post:
+        if user == post.author_username:
+            return await delete_post(session, slug)
+        else:
+            raise HTTPException(status_code=403, detail="forbidden")
+    else:
         raise HTTPException(status_code=404, detail="post not found")
-    if post_data.author_id != current_user.id:
-        raise HTTPException(status_code=403, detail="forbidden")
-
-    try:
-        await delete_post(session, slug)
-    except:
-        raise HTTPException(status_code=500, detail="unknown error")
 
 
 @post_router.get("/")
 @cache(expire=60)
-async def get_posts(session: AsyncSession = Depends(get_session)):
+async def get_posts(session: AsyncSession = Depends(get_session)) -> Sequence[Post]:
+    """
+    получение всех постов всех авторов
+    если постов нет - ошибка 404
+    """
     try:
         return await get_all_posts(session)
     except:
@@ -97,6 +134,9 @@ async def get_authors_posts(
     author: str,
     session: AsyncSession = Depends(get_session),
 ):
+    """
+    возвращает посты конкретного автора
+    """
     posts = await get_posts_by_author(session, author)
     if not posts:
         raise HTTPException(status_code=404, detail="no posts found")
@@ -109,6 +149,9 @@ async def my_posts(
     user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
 ):
+    """
+    возвращает посты текущего пользователя
+    """
     posts = await get_my_posts(session=session, user=user)
     if not posts:
         raise HTTPException(status_code=404, detail="post not found")
