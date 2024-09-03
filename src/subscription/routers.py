@@ -2,11 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database import get_session
-from app.models import User, Subscription
-from app.security.services import get_current_user
-from app.users.schemas import UserSubscribeSchema
-from app.users.services import get_user_by_username
+from database import get_session
+from users.models import User
+from subscription.models import Subscription
+from security.services import get_current_user
+from users.schemas import UserSubscribeSchema
+from users.services import get_user_by_username
 
 subs_router = APIRouter()
 
@@ -40,7 +41,7 @@ async def subscribe_user(
     existing_subscription = existing_subscription.scalar_one_or_none()
 
     if existing_subscription:
-        raise HTTPException(status_code=400, detail="you have already subscribed")
+        raise HTTPException(status_code=400, detail=f"you have already subscribed")
 
     # подписываемся
     new_subscription = Subscription(
@@ -51,7 +52,7 @@ async def subscribe_user(
     session.add(new_subscription)
     await session.commit()
 
-    return target_user
+    return 'success!'
 
 
 @subs_router.post("/unsubscribe/{username}")
@@ -82,13 +83,13 @@ async def unsubscribe_user(
     subscription = subscription.scalar_one_or_none()
     # если не подписан
     if not subscription:
-        raise HTTPException(status_code=400, detail="you are not subscribed")
+        raise HTTPException(status_code=400, detail=f"you are not subscribed")
 
     # если подписка есть, удаляем из базы данных и сохраняем
     await session.delete(subscription)
     await session.commit()
 
-    return target_user
+    return 'success!'
 
 
 @subs_router.get("/subscriptions")

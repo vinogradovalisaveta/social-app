@@ -3,9 +3,9 @@ from typing import Sequence
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.users.schemas import UserCreateSchema, UserUpdateSchema
-from app.security.password import encrypt_password
-from app.models import User
+from users.schemas import UserCreateSchema, UserUpdateSchema
+from security.password import encrypt_password
+from users.models import User
 
 
 async def create_user(session: AsyncSession, user: UserCreateSchema) -> User:

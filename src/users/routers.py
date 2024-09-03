@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import List
 
 from fastapi import Depends, HTTPException, APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
@@ -6,18 +6,18 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from fastapi_cache.decorator import cache
 
-from app.database import get_session
-from app.users.schemas import (
+from database import get_session
+from users.schemas import (
     UserSchema,
     UserCreateSchema,
     UserReadSchema,
     UserUpdateSchema,
 )
-from app.security.services import get_current_user, authenticate_user
-from app.security.token import create_jwt_token_pair
-from app.security.token_schema import TokenPairSchema
-from app.models import User
-from app.users.services import (
+from security.services import get_current_user, authenticate_user
+from security.token import create_jwt_token_pair
+from security.token_schema import TokenPairSchema
+from users.models import User
+from users.services import (
     create_user,
     get_all_users,
     update_user,

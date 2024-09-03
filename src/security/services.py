@@ -3,10 +3,10 @@ from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database import get_session
-from app.security.password import validate_password
-from app.security.token import oauth2_scheme, get_token_payload, USER_IDENTIFIER
-from app.models import User
+from database import get_session
+from security.password import validate_password
+from security.token import oauth2_scheme, get_token_payload, USER_IDENTIFIER
+from users.models import User
 
 
 async def authenticate_user(

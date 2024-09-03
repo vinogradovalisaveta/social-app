@@ -5,7 +5,7 @@ from fastapi import HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 
-from app.security.token_schema import TokenPairSchema
+from security.token_schema import TokenPairSchema
 
 
 def get_token_payload(token: str, token_type: str) -> dict:

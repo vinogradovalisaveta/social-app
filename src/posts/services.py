@@ -1,8 +1,9 @@
 from typing import Sequence
 
-from app.models import User, Post
-from app.posts.schemas import CreatePostSchema
-from app.security.services import get_current_user
+from posts.models import Post
+from users.models import User
+from posts.schemas import CreatePostSchema
+from security.services import get_current_user
 
 from fastapi import Depends
 from slugify import slugify
