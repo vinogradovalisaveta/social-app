@@ -1,12 +1,13 @@
 FROM python:3.10
 
-RUN mkdir /fastapi_app
-
 WORKDIR /fastapi_app
 
-COPY requirements.txt .
+RUN pip install --upgrade --no-cache-dir pip && pip install poetry --no-cache-dir;
 
-RUN pip install -r requirements.txt
+COPY pyproject.toml poetry.lock /fastapi_app/
+
+RUN poetry config virtualenvs.create false && \
+    poetry install --no-dev --no-interaction --no-ansi --no-cache;
 
 COPY . .
 
