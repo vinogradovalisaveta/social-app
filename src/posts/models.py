@@ -4,6 +4,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from database import Base
 from users.models import User
 
+# from comments.models import Comment
+
 
 class Post(Base):
     __tablename__ = "posts"
@@ -15,3 +17,7 @@ class Post(Base):
     slug: Mapped[str] = mapped_column(String, index=True, nullable=False)
     body: Mapped[str] = mapped_column(Text, nullable=False)
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())
+
+    comments: Mapped[list["Comment"]] = relationship(
+        "Comment", backref="post", cascade="all, delete-orphan"
+    )

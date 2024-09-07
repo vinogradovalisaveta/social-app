@@ -67,7 +67,7 @@ async def get_current_user_view(current_user: User = Depends(get_current_user)):
     return current_user
 
 
-@user_router.get("/user/user", response_model=UserSchema)
+@user_router.get("/{username}", response_model=UserSchema)
 async def get_user_profile(
     username: str,
     session: AsyncSession = Depends(get_session),
@@ -88,7 +88,7 @@ async def get_user_profile(
     return user
 
 
-@user_router.get("/users", response_model=List[UserReadSchema])
+@user_router.get("/", response_model=List[UserReadSchema])
 @cache(expire=0)
 async def get_users(session: AsyncSession = Depends(get_session)):
     """
@@ -115,7 +115,7 @@ async def authenticate(
     return create_jwt_token_pair(user_username=user.username)
 
 
-@user_router.put("/{username}", response_model=UserUpdateSchema)
+@user_router.put("/{username}/update", response_model=UserUpdateSchema)
 async def update_user_data(
     user: UserUpdateSchema,
     current_user: User = Depends(get_current_user),

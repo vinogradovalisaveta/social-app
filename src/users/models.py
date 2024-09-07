@@ -6,6 +6,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from database import Base
 from subscription.models import Subscription
 
+# from posts.models import Post
+from comments.models import Comment
+
 
 class User(Base):
     __tablename__ = "users"
@@ -30,4 +33,8 @@ class User(Base):
         "Subscription",
         foreign_keys="[Subscription.subscribed_to_id]",
         back_populates="subscribed_to",
+    )
+
+    comments: Mapped[list["Comment"]] = relationship(
+        "Comment", backref="author", cascade="all, delete-orphan"
     )
