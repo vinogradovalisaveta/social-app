@@ -9,7 +9,7 @@ from security.services import get_current_user
 from users.schemas import UserSubscribeSchema
 from users.services import get_user_by_username
 
-subs_router = APIRouter()
+subs_router = APIRouter(tags=["subscription"])
 
 
 @subs_router.post("/subscribe/{username}")
@@ -52,7 +52,7 @@ async def subscribe_user(
     session.add(new_subscription)
     await session.commit()
 
-    return 'success!'
+    return "success!"
 
 
 @subs_router.post("/unsubscribe/{username}")
@@ -89,7 +89,7 @@ async def unsubscribe_user(
     await session.delete(subscription)
     await session.commit()
 
-    return 'success!'
+    return "success!"
 
 
 @subs_router.get("/subscriptions")

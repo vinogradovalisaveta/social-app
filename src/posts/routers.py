@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Sequence, List
 
 from database import get_session
 from users.models import User
