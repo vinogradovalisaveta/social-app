@@ -1,8 +1,8 @@
 """comments
 
-Revision ID: 52001dc75deb
+Revision ID: 39cbc61b2fa4
 Revises: 
-Create Date: 2024-09-07 18:36:49.010367
+Create Date: 2024-09-08 13:49:54.211486
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '52001dc75deb'
+revision: str = '39cbc61b2fa4'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -42,7 +42,7 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['author_username'], ['users.username'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_posts_slug'), 'posts', ['slug'], unique=False)
+    op.create_index(op.f('ix_posts_slug'), 'posts', ['slug'], unique=True)
     op.create_table('subscriptions',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('subscriber_id', sa.Integer(), nullable=False),
@@ -53,14 +53,14 @@ def upgrade() -> None:
     )
     op.create_table('comments',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('post_id', sa.Integer(), nullable=False),
+    sa.Column('post_slug', sa.String(), nullable=False),
     sa.Column('parent_id', sa.Integer(), nullable=True),
     sa.Column('author_username', sa.String(), nullable=False),
     sa.Column('text', sa.String(), nullable=False),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.ForeignKeyConstraint(['author_username'], ['users.username'], ),
     sa.ForeignKeyConstraint(['parent_id'], ['comments.id'], ),
-    sa.ForeignKeyConstraint(['post_id'], ['posts.id'], ),
+    sa.ForeignKeyConstraint(['post_slug'], ['posts.slug'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_comments_id'), 'comments', ['id'], unique=False)

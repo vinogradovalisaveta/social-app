@@ -9,7 +9,7 @@ from security.services import get_current_user
 from users.schemas import UserSubscribeSchema
 from users.services import get_user_by_username
 
-subs_router = APIRouter(tags=['subscription'])
+subs_router = APIRouter(tags=["subscription"])
 
 
 @subs_router.post("/subscribe/{username}")

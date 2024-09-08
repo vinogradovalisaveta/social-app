@@ -7,8 +7,8 @@ class Comment(Base):
     __tablename__ = "comments"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    post_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("posts.id"), nullable=False
+    post_slug: Mapped[str] = mapped_column(
+        String, ForeignKey("posts.slug"), nullable=False
     )
     parent_id: Mapped[int] = mapped_column(
         Integer, ForeignKey("comments.id"), nullable=True

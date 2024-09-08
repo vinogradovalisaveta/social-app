@@ -14,7 +14,7 @@ class Post(Base):
     author_username: Mapped[str] = mapped_column(String, ForeignKey("users.username"))
     author: Mapped["User"] = relationship("User", back_populates="posts")
     title: Mapped[str] = mapped_column(String, nullable=False)
-    slug: Mapped[str] = mapped_column(String, index=True, nullable=False)
+    slug: Mapped[str] = mapped_column(String, index=True, nullable=False, unique=True)
     body: Mapped[str] = mapped_column(Text, nullable=False)
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())
 
