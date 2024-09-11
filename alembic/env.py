@@ -15,6 +15,7 @@ from src.database import Base
 from src.posts.models import *
 # from src.subscription.models import *
 # from src.comments.models import *
+from src.images.models import Image
 
 from src.config import DB_HOST, DB_PORT, DB_USER, DB_NAME, DB_PASS
 
