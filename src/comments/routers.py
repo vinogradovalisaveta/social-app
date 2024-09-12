@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Path
+from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 from comments.schemas import CommentAddSchema, CommentReadSchema
@@ -6,9 +6,7 @@ from security.services import get_current_user
 from database import get_session
 from users.models import User
 from sqlalchemy import select
-from posts.models import Post
 from comments.models import Comment
-
 from posts.services import read_post
 
 router = APIRouter(tags=["comments"])

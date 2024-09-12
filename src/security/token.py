@@ -1,10 +1,8 @@
 import os
 from datetime import timedelta, datetime
-
 from fastapi import HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
-
 from security.token_schema import TokenPairSchema
 
 

@@ -1,6 +1,5 @@
 from sqlalchemy import Integer, String, ForeignKey, Text, DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from database import Base
 from users.models import User
 
@@ -20,6 +19,6 @@ class Post(Base):
         "Comment", backref="post", cascade="all, delete-orphan"
     )
 
-    images: Mapped[list['Image']] = relationship(
-        'Image', backref='post', cascade='all, delete-orphan'
+    images: Mapped[list["Image"]] = relationship(
+        "Image", backref="post", cascade="all, delete-orphan"
     )

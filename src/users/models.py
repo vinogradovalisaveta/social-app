@@ -1,12 +1,8 @@
 from typing import List
-
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from database import Base
 from subscription.models import Subscription
-
-# from posts.models import Post
 from comments.models import Comment
 
 

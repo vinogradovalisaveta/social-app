@@ -1,9 +1,7 @@
-from typing import Sequence, List
-
+from typing import Sequence
 from database import get_session
 from users.models import User
 from posts.models import Post
-
 from posts.schemas import CreatePostSchema, ReadPostSchema
 from posts.services import (
     create_post,
@@ -15,18 +13,9 @@ from posts.services import (
     get_my_posts,
 )
 from security.services import get_current_user
-
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
-
-#
-# from posts.schemas import CreatePostSchema, ReadPostSchema
-# from posts.services import create_post
-# from models import User
-# from database import get_session
-
-# import schemas
 
 post_router = APIRouter(prefix="/posts", tags=["posts"])
 

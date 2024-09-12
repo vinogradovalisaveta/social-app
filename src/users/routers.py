@@ -1,11 +1,8 @@
 from typing import List
-
 from fastapi import Depends, HTTPException, APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from fastapi_cache.decorator import cache
-
 from database import get_session
 from users.schemas import (
     UserSchema,

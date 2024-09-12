@@ -1,14 +1,12 @@
-from typing import Sequence
-
-from posts.models import Post
-from users.models import User
-from posts.schemas import CreatePostSchema
-from security.services import get_current_user
-
 from fastapi import Depends
 from slugify import slugify
 from sqlalchemy import select, desc
 from sqlalchemy.ext.asyncio import AsyncSession
+from typing import Sequence
+from posts.models import Post
+from users.models import User
+from posts.schemas import CreatePostSchema
+from security.services import get_current_user
 
 
 async def create_post(
