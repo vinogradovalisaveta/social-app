@@ -1,18 +1,25 @@
-from fastapi import Depends
+from fastapi import Depends, UploadFile, Form, File
 from slugify import slugify
 from sqlalchemy import select, desc
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Sequence
+from typing import Sequence, List
 from posts.models import Post
 from users.models import User
 from posts.schemas import CreatePostSchema
 from security.services import get_current_user
+import os
+import uuid
+import aiofiles
+import asyncio
+
+from images.models import Image
 
 
 async def create_post(
     session: AsyncSession,
     post: CreatePostSchema,
     user: User = Depends(get_current_user),
+    images: List[UploadFile] = File(...),
 ) -> Post:
     """
     Создает новый пост в базе данных
@@ -28,6 +35,28 @@ async def create_post(
     session.add(new_post)
     await session.commit()
     await session.refresh(new_post)
+
+    for image_url in post.images:
+        db_image = Image(url=image_url)
+        new_post.images.append(db_image)
+
+    # for image in images:
+    #     filename = f"{uuid.uuid4().hex}_{image.filename}"
+    #
+    #     # 'uploads' - folder for saving images
+    #     filepath = os.path.join("uploads", filename)
+    #
+    #     # wb - write binary - запись в двоичном режиме
+    #     async with aiofiles.open(filepath, "wb") as f:
+    #         content = await image.read()
+    #         await f.write(content)
+    #
+    #     new_image = Image(filename=filename, post_id=new_post.id)
+    #     session.add(new_image)
+
+    await session.commit()
+    await session.refresh(new_post)
+
     return new_post
 
 

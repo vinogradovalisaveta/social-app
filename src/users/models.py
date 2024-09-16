@@ -13,9 +13,9 @@ class User(Base):
     username: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
     email: Mapped[str] = mapped_column(String(256), nullable=False, unique=True)
     password: Mapped[str] = mapped_column(String(256), nullable=False)
-    name: Mapped[str] = mapped_column(String, nullable=True)
-    location: Mapped[str] = mapped_column(String, nullable=True)
-    bio: Mapped[str] = mapped_column(String, nullable=True)
+    name: Mapped[str] = mapped_column(String, nullable=True, default="none")
+    location: Mapped[str] = mapped_column(String, nullable=True, default="none")
+    bio: Mapped[str] = mapped_column(String, nullable=True, default="none")
 
     posts: Mapped[List["Post"]] = relationship("Post", back_populates="author")
 

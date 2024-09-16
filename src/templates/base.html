@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Pretty Blog</title>
+    <link rel="stylesheet" href="{{ '/static/style.css' }}">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="container">
+            <h1 class="site-title"><a href="{{ url_for('get_index_page') }}">My Pretty Blog</a></h1>
+            <nav class="site-nav">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="{{ url_for('get_add_new_post') }}">add new post</a></li>
+                    {% if current_user %}
+                    <li><a href="#">logout</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('get_login_page') }}">login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <form class="search-form" action="#" method="get">
+                <input type="text" placeholder="Search...">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </header>
+{% block content %}
+{% endblock %}
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2023 My Pretty Blog</p>
+        </div>
+    </footer>
+
+</body>
+</html>

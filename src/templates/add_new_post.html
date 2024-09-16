@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="POST" action="/posts/add_new_post" enctype="multipart/form-data">
+    <input type="text" name="title" placeholder="title">
+    <textarea name="body" placeholder="body"></textarea>
+    <input type="file" name="images[]" multiple>
+    <button type="submit">create post</button>
+</form>
+{% endblock %}

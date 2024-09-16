@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Sequence, List
 from database import get_session
 from users.models import User
 from posts.models import Post
@@ -13,9 +13,11 @@ from posts.services import (
     get_my_posts,
 )
 from security.services import get_current_user
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
+from images.models import Image
+import asyncio
 
 post_router = APIRouter(prefix="/posts", tags=["posts"])
 
@@ -25,19 +27,35 @@ async def add_new_post(
     post: CreatePostSchema,
     session: AsyncSession = Depends(get_session),
     user: User = Depends(get_current_user),
-) -> ReadPostSchema:
-    """
-    создает новый пост
-    user: текущий пользователь
-    возвращает ReadPostSchema
-    """
-    new_post = await create_post(session=session, post=post, user=user)
+    images: List[UploadFile] = File(...),
+):
+    new_post = await create_post(session=session, post=post, user=user, images=images)
     return ReadPostSchema(
         author=new_post.author_username,
         title=new_post.title,
         body=new_post.body,
         created_at=new_post.created_at,
     )
+
+
+# @post_router.post("/", response_model=CreatePostSchema)
+# async def add_new_post(
+#     post: CreatePostSchema,
+#     session: AsyncSession = Depends(get_session),
+#     user: User = Depends(get_current_user),
+# ) -> ReadPostSchema:
+#     """
+#     создает новый пост
+#     user: текущий пользователь
+#     возвращает ReadPostSchema
+#     """
+#     new_post = await create_post(session=session, post=post, user=user)
+#     return ReadPostSchema(
+#         author=new_post.author_username,
+#         title=new_post.title,
+#         body=new_post.body,
+#         created_at=new_post.created_at,
+#     )
 
 
 @post_router.get("/{slug}", response_model=ReadPostSchema)

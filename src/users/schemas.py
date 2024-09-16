@@ -24,7 +24,7 @@ class UserSchema(UserBaseSchema):
     id: int
 
 
-class UserCreateSchema(UserBaseSchema):
+class UserCreateSchema(BaseModel):
     """
     Эта схема представляет данные, необходимые для создания нового
     пользователя. Она также наследует свойства от UserBaseSchema,
@@ -33,6 +33,8 @@ class UserCreateSchema(UserBaseSchema):
     которые пользователь предоставляет для регистрации.
     """
 
+    username: str = Field(...)
+    email: EmailStr = Field(...)
     password: str = Field(..., max_length=256)
 
 
@@ -60,3 +62,8 @@ class UserSubscribeSchema(BaseModel):
     """
 
     username: str
+
+
+class LoginSchema(BaseModel):
+    username: str
+    password: str

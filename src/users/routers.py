@@ -25,7 +25,7 @@ from users.services import (
 user_router = APIRouter(prefix="/users", tags=["users"])
 
 
-@user_router.post("/")
+@user_router.post("/register")
 async def register(
     user: UserCreateSchema, session: AsyncSession = Depends(get_session)
 ):

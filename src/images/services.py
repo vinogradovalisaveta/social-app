@@ -8,19 +8,19 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
-async def save_image(file: UploadFile) -> str:
-    # generation of unique filename
-    filename = f"{uuid.uuid4().hex}_{file.filename}"
-
-    # 'uploads' - folder for saving images
-    filepath = os.path.join("uploads", filename)
-
-    # wb - write binary - запись в двоичном режиме
-    async with aiofiles.open(filepath, "wb") as f:
-        content = await file.read()
-        await f.write(content)
-
-    return filename
+# async def save_image(file: UploadFile) -> str:
+#     # generation of unique filename
+#     filename = f"{uuid.uuid4().hex}_{file.filename}"
+#
+#     # 'uploads' - folder for saving images
+#     filepath = os.path.join("uploads", filename)
+#
+#     # wb - write binary - запись в двоичном режиме
+#     async with aiofiles.open(filepath, "wb") as f:
+#         content = await file.read()
+#         await f.write(content)
+#
+#     return filename
 
 
 async def read_image(filename: str) -> bytes:

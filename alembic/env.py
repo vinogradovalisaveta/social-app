@@ -7,12 +7,13 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-sys.path.append(os.path.join(sys.path[0], 'src'))
+sys.path.append(os.path.join(sys.path[0], "src"))
 
 from src.database import Base
 
 # from src.users.models import *
 from src.posts.models import *
+
 # from src.subscription.models import *
 # from src.comments.models import *
 from src.images.models import Image

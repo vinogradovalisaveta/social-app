@@ -1,5 +1,8 @@
 from datetime import datetime
 from pydantic import BaseModel
+from typing import List
+from fastapi import Form, UploadFile
+from images.schemas import Image
 
 
 class BasePostModel(BaseModel):
@@ -16,7 +19,7 @@ class CreatePostSchema(BasePostModel):
     модель для создания поста, наследуется от BasePostModel
     """
 
-    pass
+    images: List[str]
 
 
 class ReadPostSchema(BasePostModel):
@@ -27,3 +30,4 @@ class ReadPostSchema(BasePostModel):
 
     author: str
     created_at: datetime
+    images: List[Image] = []
