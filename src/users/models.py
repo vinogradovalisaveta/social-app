@@ -34,3 +34,5 @@ class User(Base):
     comments: Mapped[list["Comment"]] = relationship(
         "Comment", backref="author", cascade="all, delete-orphan"
     )
+
+    likes: Mapped[list["Like"]] = relationship("Like", back_populates="user")

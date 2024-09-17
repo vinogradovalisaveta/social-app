@@ -1,5 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel
+from typing import List
 
 
 class BasePostModel(BaseModel):
@@ -27,3 +28,4 @@ class ReadPostSchema(BasePostModel):
 
     author: str
     created_at: datetime
+    images: List[str] = []

@@ -12,6 +12,26 @@ from posts.services import read_post
 router = APIRouter(tags=["comments"])
 
 
+@router.delete("/{post.slug}/comments")
+async def delete_comment(
+    comment_id: int,
+    user: User = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session),
+):
+    comment = (
+        await session.execute(select(Comment).where(Comment.id == comment_id))
+    ).scalar_one_or_none()
+    if comment is None:
+        raise HTTPException(status_code=404, detail="comment not found")
+
+    if comment.author_username != user.username:
+        raise HTTPException(status_code=403, detail="forbidden")
+
+    await session.delete(comment)
+    await session.commit()
+    return comment
+
+
 @router.post("/{post.slug}/comments")
 async def add_comment(
     comment: CommentAddSchema,

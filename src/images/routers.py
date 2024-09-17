@@ -73,4 +73,6 @@ async def post_images_route(post_id: int, session: AsyncSession = Depends(get_se
     for data in image_data:
         responses.append({"data": data, "content_type": "image/jpeg"})
 
-    return responses
+    return
+
+    # return responses

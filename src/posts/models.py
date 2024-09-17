@@ -22,3 +22,5 @@ class Post(Base):
     images: Mapped[list["Image"]] = relationship(
         "Image", backref="post", cascade="all, delete-orphan"
     )
+
+    likes: Mapped[list["Like"]] = relationship("Like", back_populates="post")
