@@ -16,6 +16,10 @@ from security.services import get_current_user
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+
+from images.models import Image
+
 
 post_router = APIRouter(prefix="/posts", tags=["posts"])
 
@@ -51,11 +55,15 @@ async def get_one_post(
     """
     post = await read_post(session, slug)
     if post:
+        query = select(Image.filename).where(Image.post_id == post.id)
+        result = await session.execute(query)
+        filenames = [f"/uploads/{row.filename}" for row in result]
         return ReadPostSchema(
             author=post.author_username,
             title=post.title,
             body=post.body,
             created_at=post.created_at,
+            images=filenames,
         )
     else:
         raise HTTPException(status_code=404, detail="post not found")

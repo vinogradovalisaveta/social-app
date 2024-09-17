@@ -8,6 +8,7 @@ from posts.routers import post_router
 from subscription.routers import subs_router
 from users.routers import user_router
 from comments.routers import router
+from likes.routers import router as like_router
 
 app = FastAPI()
 
@@ -16,6 +17,7 @@ app.include_router(router)
 app.include_router(subs_router)
 app.include_router(post_router)
 app.include_router(user_router)
+app.include_router(like_router)
 
 
 @app.on_event("startup")

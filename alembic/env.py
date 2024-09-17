@@ -11,19 +11,18 @@ sys.path.append(os.path.join(sys.path[0], 'src'))
 
 from src.database import Base
 
-# from src.users.models import *
+# from src.comments.models import *
+from src.images.models import *
+from src.likes.models import *
 from src.posts.models import *
 # from src.subscription.models import *
-# from src.comments.models import *
-from src.images.models import Image
+# from src.users.models import *
 
 from src.config import DB_HOST, DB_PORT, DB_USER, DB_NAME, DB_PASS
 
 
 from alembic import context
 
-# this is the Alembic Config object, which provides
-# access to the values within the .ini file in use.
 config = context.config
 
 section = config.config_ini_section
@@ -32,6 +31,10 @@ config.set_section_option(section, "DB_PORT", DB_PORT)
 config.set_section_option(section, "DB_USER", DB_USER)
 config.set_section_option(section, "DB_NAME", DB_NAME)
 config.set_section_option(section, "DB_PASS", DB_PASS)
+
+# this is the Alembic Config object, which provides
+# access to the values within the .ini file in use.
+config = context.config
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
