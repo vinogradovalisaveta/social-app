@@ -7,6 +7,7 @@ from posts.models import Post
 from users.models import User
 from posts.schemas import CreatePostSchema
 from security.services import get_current_user
+from images.models import Image
 
 
 async def create_post(
@@ -37,8 +38,8 @@ async def read_post(session: AsyncSession, slug: str) -> Post | None:
     возвращает объект класса Post либо None (если пост не найден)
     """
     query = select(Post).where(Post.slug == slug)
-    result = await session.execute(query)
-    return result.scalar_one_or_none()
+    post = (await session.execute(query)).scalar_one_or_none()
+    return post
 
 
 async def update_post(

@@ -4,6 +4,7 @@ from sqlalchemy import select
 
 from database import get_session
 from likes.models import Like
+from likes.services import get_likes
 from security.services import get_current_user
 from users.models import User
 
@@ -44,7 +45,6 @@ async def unlike_post(
 
 
 @router.get("/posts/{post.id}/likes")
-async def get_likes(post_id: int, session: AsyncSession = Depends(get_session)):
-    query = await session.execute(select(Like).where(Like.post_id == post_id))
-    likes = query.scalars().all()
+async def get_likes_to_post(post_id: int, session: AsyncSession = Depends(get_session)):
+    likes = await get_likes(post_id, session)
     return likes

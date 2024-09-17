@@ -8,6 +8,10 @@ from security.services import get_current_user
 from users.schemas import UserSubscribeSchema
 from users.services import get_user_by_username
 
+from subscription.services import get_followers
+
+from subscription.services import get_follows
+
 subs_router = APIRouter(tags=["subscription"])
 
 
@@ -101,17 +105,9 @@ async def get_subscriptions(
     возвращает список юзернеймов подписок
     """
 
-    # запрос в базу данных, где ищем текущего пользователя и его подписки
-    query = (
-        select(User)
-        .join(Subscription, and_(User.id == Subscription.subscribed_to_id))
-        .where(Subscription.subscriber_id == user.id)
-    )
+    follows = await get_follows(user, session)
 
-    result = await session.execute(query)
-    result = result.scalars().all()
-
-    return [UserSubscribeSchema(username=user.username) for user in result]
+    return follows
 
 
 @subs_router.get("/subscribers")
@@ -125,14 +121,6 @@ async def get_subscribers(
     возвращает список юзернеймов подписчиков
     """
 
-    # запрос в базу данных, где находим текущего пользователя и его подписчиков
-    query = (
-        select(User)
-        .join(Subscription, and_(User.id == Subscription.subscriber_id))
-        .where(Subscription.subscribed_to_id == user.id)
-    )
+    followers = await get_followers(user, session)
 
-    result = await session.execute(query)
-    result = result.scalars().all()
-
-    return [UserSubscribeSchema(username=user.username) for user in result]
+    return followers
