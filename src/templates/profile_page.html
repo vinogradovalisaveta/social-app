@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ user.username }}</h1>
+<h3>email: {{ user.email }}</h3>
+<h3>name: {{ user.name }}</h3>
+<h3>location: {{ user.location }}</h3>
+<h3>bio: {{ user.bio }}</h3>
+<h3>followers: {{ followers|length }} {% for follower in followers %}
+    <a href="#">{{ follower.username }}</a>{% endfor %}</h3>
+{% for post in posts %}
+<h3>{{ post.title }}</h3>
+<p>{{ post.body|truncate(150) }} <a href="#">...</a></p>
+{% endfor %}
+{% endblock %}
