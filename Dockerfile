@@ -11,7 +11,7 @@ RUN poetry config virtualenvs.create false && \
 
 COPY . .
 
-RUN chmod a+x docker/app.sh
+RUN chmod a+x app.sh
 
 WORKDIR src
 
