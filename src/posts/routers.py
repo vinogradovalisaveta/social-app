@@ -1,4 +1,9 @@
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi_cache.decorator import cache
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 from typing import Sequence
+
 from database import get_session
 from users.models import User
 from posts.models import Post
@@ -13,11 +18,6 @@ from posts.services import (
     get_my_posts,
 )
 from security.services import get_current_user
-from fastapi import APIRouter, Depends, HTTPException
-from fastapi_cache.decorator import cache
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-
 from images.models import Image
 
 

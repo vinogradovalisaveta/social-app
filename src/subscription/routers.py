@@ -1,16 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select, and_
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from database import get_session
-from users.models import User
-from subscription.models import Subscription
 from security.services import get_current_user
-from users.schemas import UserSubscribeSchema
+from subscription.models import Subscription
+from subscription.services import get_follows, get_followers
+from users.models import User
 from users.services import get_user_by_username
 
-from subscription.services import get_followers
-
-from subscription.services import get_follows
 
 router = APIRouter(tags=["subscription"])
 

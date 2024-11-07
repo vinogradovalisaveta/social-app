@@ -1,9 +1,10 @@
 from typing import List
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from comments.models import Comment
 from database import Base
 from subscription.models import Subscription
-from comments.models import Comment
 
 
 class User(Base):

@@ -1,6 +1,7 @@
-from database import Base
-from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import Integer, ForeignKey, String
+from sqlalchemy.orm import Mapped, mapped_column
+
+from database import Base
 
 
 class Image(Base):

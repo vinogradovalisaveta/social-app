@@ -2,6 +2,7 @@ from fastapi import HTTPException, Depends
 from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from database import get_session
 from security.password import validate_password
 from security.token import oauth2_scheme, get_token_payload, USER_IDENTIFIER

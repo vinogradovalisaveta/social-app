@@ -3,11 +3,12 @@ from slugify import slugify
 from sqlalchemy import select, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Sequence
+
+from images.models import Image
 from posts.models import Post
-from users.models import User
 from posts.schemas import CreatePostSchema
 from security.services import get_current_user
-from images.models import Image
+from users.models import User
 
 
 async def create_post(
@@ -38,8 +39,8 @@ async def read_post(session: AsyncSession, slug: str) -> Post | None:
     возвращает объект класса Post либо None (если пост не найден)
     """
     query = select(Post).where(Post.slug == slug)
-    post = (await session.execute(query)).scalar_one_or_none()
-    return post
+    post = await session.execute(query)
+    return post.scalar_one_or_none()
 
 
 async def update_post(
@@ -79,9 +80,9 @@ async def get_all_posts(session: AsyncSession) -> Sequence[Post]:
     получение всех постов из базы данных
     возвращает список всех постов
     """
-    posts = await session.execute(select(Post).order_by(desc(Post.created_at)))
-    posts = posts.scalars().all()
-    return posts
+    query = select(Post).order_by(desc(Post.created_at))
+    posts = await session.execute(query)
+    return posts.scalars().all()
 
 
 async def get_posts_by_author(session: AsyncSession, author: str) -> Sequence[Post]:
@@ -89,7 +90,8 @@ async def get_posts_by_author(session: AsyncSession, author: str) -> Sequence[Po
     получение постов конкретного автора
     возвращает список всех постов автора
     """
-    posts = await session.execute(select(Post).where(Post.author_username == author))
+    query = select(Post).where(Post.author_username == author)
+    posts = await session.execute(query)
     return posts.scalars().all()
 
 
@@ -98,7 +100,6 @@ async def get_my_posts(session: AsyncSession, user: User) -> Sequence[Post]:
     получение постов аутентифицированного пользователя
     возвращает список постов
     """
-    posts = await session.execute(
-        select(Post).where(Post.author_username == user.username)
-    )
+    query = select(Post).where(Post.author_username == user.username)
+    posts = await session.execute(query)
     return posts.scalars().all()

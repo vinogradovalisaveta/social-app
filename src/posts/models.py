@@ -1,5 +1,6 @@
 from sqlalchemy import Integer, String, ForeignKey, Text, DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from database import Base
 from users.models import User
 
