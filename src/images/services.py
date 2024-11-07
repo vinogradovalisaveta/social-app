@@ -3,7 +3,7 @@ import uuid
 import aiofiles
 import asyncio
 from fastapi import UploadFile
-from images.models import Image
+from .models import Image
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 

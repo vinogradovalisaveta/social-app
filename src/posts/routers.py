@@ -21,10 +21,10 @@ from sqlalchemy import select
 from images.models import Image
 
 
-post_router = APIRouter(prefix="/posts", tags=["posts"])
+router = APIRouter(prefix="/posts", tags=["posts"])
 
 
-@post_router.post("/", response_model=CreatePostSchema)
+@router.post("/", response_model=CreatePostSchema)
 async def add_new_post(
     post: CreatePostSchema,
     session: AsyncSession = Depends(get_session),
@@ -44,7 +44,7 @@ async def add_new_post(
     )
 
 
-@post_router.get("/{slug}", response_model=ReadPostSchema)
+@router.get("/{slug}", response_model=ReadPostSchema)
 async def get_one_post(
     slug: str,
     session: AsyncSession = Depends(get_session),
@@ -69,7 +69,7 @@ async def get_one_post(
         raise HTTPException(status_code=404, detail="post not found")
 
 
-@post_router.put("/{slug}", response_model=ReadPostSchema)
+@router.put("/{slug}", response_model=ReadPostSchema)
 async def update_old_post(
     post_data: CreatePostSchema,
     slug: str,
@@ -100,7 +100,7 @@ async def update_old_post(
         raise HTTPException(status_code=404, detail="post not found")
 
 
-@post_router.delete("/{slug}")
+@router.delete("/{slug}")
 async def post_delete(
     slug: str,
     session: AsyncSession = Depends(get_session),
@@ -122,7 +122,7 @@ async def post_delete(
         raise HTTPException(status_code=404, detail="post not found")
 
 
-@post_router.get("/")
+@router.get("/")
 @cache(expire=60)
 async def get_posts(session: AsyncSession = Depends(get_session)) -> Sequence[Post]:
     """
@@ -135,7 +135,7 @@ async def get_posts(session: AsyncSession = Depends(get_session)) -> Sequence[Po
         raise HTTPException(status_code=404, detail="no posts found")
 
 
-@post_router.get("/{username}/posts")
+@router.get("/{username}/posts")
 async def get_authors_posts(
     author: str,
     session: AsyncSession = Depends(get_session),
@@ -150,7 +150,7 @@ async def get_authors_posts(
     return posts
 
 
-@post_router.get("/{username}/my_posts")
+@router.get("/{username}/my_posts")
 async def my_posts(
     user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),

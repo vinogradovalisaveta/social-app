@@ -9,10 +9,10 @@ from images.services import get_post_images, save_image
 from posts.models import Post
 
 
-image_router = APIRouter(tags=["images"])
+router = APIRouter(tags=["images"])
 
 
-@image_router.post("/{post.slug}/images")
+@router.post("/{post.slug}/images")
 async def add_images(
     post_id: int,
     files: List[UploadFile] = File(...),
@@ -58,7 +58,7 @@ async def add_images(
     }
 
 
-@image_router.get("/{post.slug}/images")
+@router.get("/{post.slug}/images")
 async def post_images_route(post_id: int, session: AsyncSession = Depends(get_session)):
     post = (
         await session.execute(select(Post).where(Post.id == post_id))

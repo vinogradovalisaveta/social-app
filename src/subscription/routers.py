@@ -12,10 +12,10 @@ from subscription.services import get_followers
 
 from subscription.services import get_follows
 
-subs_router = APIRouter(tags=["subscription"])
+router = APIRouter(tags=["subscription"])
 
 
-@subs_router.post("/subscribe/{username}")
+@router.post("/subscribe/{username}")
 async def subscribe_user(
     username: str,
     user: User = Depends(get_current_user),
@@ -58,7 +58,7 @@ async def subscribe_user(
     return "success!"
 
 
-@subs_router.post("/unsubscribe/{username}")
+@router.post("/unsubscribe/{username}")
 async def unsubscribe_user(
     username: str,
     user: User = Depends(get_current_user),
@@ -95,7 +95,7 @@ async def unsubscribe_user(
     return "success!"
 
 
-@subs_router.get("/subscriptions")
+@router.get("/subscriptions")
 async def get_subscriptions(
     user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)
 ) -> list:
@@ -110,7 +110,7 @@ async def get_subscriptions(
     return follows
 
 
-@subs_router.get("/subscribers")
+@router.get("/subscribers")
 async def get_subscribers(
     user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),

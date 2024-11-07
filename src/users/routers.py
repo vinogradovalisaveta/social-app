@@ -22,10 +22,10 @@ from users.services import (
     get_user_by_email,
 )
 
-user_router = APIRouter(prefix="/users", tags=["users"])
+router = APIRouter(prefix="/users", tags=["users"])
 
 
-@user_router.post("/")
+@router.post("/")
 async def register(
     user: UserCreateSchema, session: AsyncSession = Depends(get_session)
 ):
@@ -56,7 +56,7 @@ async def register(
     return user
 
 
-@user_router.get("/me", response_model=UserSchema)
+@router.get("/me", response_model=UserSchema)
 async def get_current_user_view(current_user: User = Depends(get_current_user)):
     """
     возвращает текущего пользователя
@@ -64,7 +64,7 @@ async def get_current_user_view(current_user: User = Depends(get_current_user)):
     return current_user
 
 
-@user_router.get("/{username}", response_model=UserSchema)
+@router.get("/{username}", response_model=UserSchema)
 async def get_user_profile(
     username: str,
     session: AsyncSession = Depends(get_session),
@@ -85,7 +85,7 @@ async def get_user_profile(
     return user
 
 
-@user_router.get("/", response_model=List[UserReadSchema])
+@router.get("/", response_model=List[UserReadSchema])
 @cache(expire=0)
 async def get_users(session: AsyncSession = Depends(get_session)):
     """
@@ -97,7 +97,7 @@ async def get_users(session: AsyncSession = Depends(get_session)):
     return users
 
 
-@user_router.post("/token", response_model=TokenPairSchema)
+@router.post("/token", response_model=TokenPairSchema)
 async def authenticate(
     session: AsyncSession = Depends(get_session),
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -112,7 +112,7 @@ async def authenticate(
     return create_jwt_token_pair(user_username=user.username)
 
 
-@user_router.put("/{username}/update", response_model=UserUpdateSchema)
+@router.put("/{username}/update", response_model=UserUpdateSchema)
 async def update_user_data(
     user: UserUpdateSchema,
     current_user: User = Depends(get_current_user),
